@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#183153">
+<title>Tyskatränaren – haben & sein</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#183153;background:#f1f5fb}*{box-sizing:border-box}body{margin:0}.wrap{max-width:850px;margin:auto;padding:22px}header{display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{font-weight:850;font-size:1.35rem}.flag{font-size:1.4em}.subtitle{color:#60718b;margin-top:5px}.card{background:white;border:1px solid #dce4f0;border-radius:22px;padding:24px;box-shadow:0 10px 30px #1d34510a;margin-top:18px}h1{margin:8px 0 6px;font-size:clamp(1.6rem,5vw,2.4rem)}h2{font-size:1.2rem;margin:0 0 14px}.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:23px}button{cursor:pointer;font:inherit;border-radius:13px;border:1px solid #cad5e5;padding:12px 15px;background:white;color:#183153;font-weight:700}button:hover{border-color:#3468ca}button:focus-visible{outline:3px solid #ffb938;outline-offset:2px}.tab.active,.primary{background:#225ad2;color:#fff;border-color:#225ad2}.primary:disabled{opacity:.45;cursor:not-allowed}.small{font-size:.88rem}.muted{color:#60718b}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.choice{text-align:left;font-size:1.15rem;min-height:58px}.choice.correct{background:#e7f8ed;border:2px solid #259b59}.choice.wrong{background:#fff0f1;border:2px solid #d65265}.choice:disabled{cursor:default}.question{font-size:clamp(1.65rem,5vw,2.5rem);font-weight:800;letter-spacing:.01em;margin:20px 0}.blank{color:#225ad2}.feedback{padding:13px;border-radius:12px;background:#edf4ff;line-height:1.55;margin-top:14px}.feedback.good{background:#e7f8ed}.progress{height:9px;background:#e7edf7;border-radius:20px;overflow:hidden}.bar{height:100%;background:#225ad2;transition:width .25s}.row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:19px}table{border-collapse:collapse;width:100%;text-align:left}th,td{border-bottom:1px solid #e3e9f2;padding:10px}th{background:#f5f8ff}.pill{background:#e8efff;border-radius:100px;padding:7px 11px;font-size:.82rem;font-weight:750}.hide{display:none!important}.optionline{display:flex;flex-wrap:wrap;gap:8px}.optionline button.selected{background:#dce8ff;border-color:#225ad2}.score{font-size:2rem;font-weight:850;color:#225ad2}footer{margin:22px 0;color:#66758d;font-size:.82rem}@media(max-width:490px){.wrap{padding:14px}.card{padding:18px}.grid{gap:8px}.choice{padding:11px}}
+</style>
+</head>
+<body><main class="wrap">
+<header><div><div class="brand"><span class="flag">🇩🇪</span> Tyskatränaren</div><div class="subtitle">Träna presens av <b>haben</b> och <b>sein</b></div></div><span class="pill" id="best">Bästa: –</span></header>
+<nav class="tabs" aria-label="Delar"><button id="navQuiz" class="tab active">🎯 Öva</button><button id="navTable" class="tab">📚 Böjningstabell</button></nav>
+<section id="quiz" class="card"><div class="row"><div><h1>Välj rätt verbform</h1><div class="muted">Fyll i luckan i den tyska meningen.</div></div><span id="counter" class="pill">1 av 10</span></div>
+<div class="actions" role="group" aria-label="Välj verb"><button class="mode selected" data-mode="both">Båda verben</button><button class="mode" data-mode="haben">haben</button><button class="mode" data-mode="sein">sein</button></div>
+<div style="margin-top:22px" class="progress" aria-label="Framsteg"><div id="bar" class="bar" style="width:0"></div></div>
+<div class="row" style="margin-top:14px"><span class="muted" id="verbLabel">Verb: haben</span><b id="scoreLabel">Poäng: 0</b></div>
+<div id="play"><div class="question" id="question"></div><div class="grid" id="choices"></div><div id="feedback" class="feedback hide" role="status" aria-live="polite"></div><div class="actions"><button id="next" class="primary hide">Nästa fråga →</button></div></div>
+<div id="finish" class="hide"><p>Du är klar med omgången!</p><div class="score" id="finalScore"></div><p class="muted" id="summary"></p><div class="actions"><button id="restart" class="primary">Spela igen</button><button id="retry" class="hide">Öva på misstagen</button></div></div></section>
+<section id="reference" class="card hide"><h2>Böjning i presens</h2><p class="muted">Läs tabellen innan du övar, eller gå tillbaka hit när du vill.</p><table><thead><tr><th>Pronomen</th><th>haben (ha)</th><th>sein (vara)</th></tr></thead><tbody><tr><td>ich (jag)</td><td>habe</td><td>bin</td></tr><tr><td>du (du)</td><td>hast</td><td>bist</td></tr><tr><td>er / sie / es (han/hon/det)</td><td>hat</td><td>ist</td></tr><tr><td>wir (vi)</td><td>haben</td><td>sind</td></tr><tr><td>ihr (ni)</td><td>habt</td><td>seid</td></tr><tr><td>sie / Sie (de / Ni)</td><td>haben</td><td>sind</td></tr></tbody></table><p class="feedback">Kom ihåg: <b>ihr</b> = ni (till flera personer), <b>sie</b> = de, och <b>Sie</b> = artigt Ni. <b>Sie</b> och <b>sie</b> i plural använder samma verbform.</p><button id="back" class="primary">Till övningarna →</button></section>
+<footer>Övningarna fungerar även utan internet efter att sidan har öppnats. Resultat sparas bara i den här webbläsaren.</footer>
+</main><script>
+'use strict';
+const people=[
+{p:'ich',sv:'jag',haben:'habe',sein:'bin'},
+{p:'du',sv:'du',haben:'hast',sein:'bist'},
+{p:'er',sv:'han',haben:'hat',sein:'ist'},
+{p:'sie (hon)',subject:'sie',sv:'hon',haben:'hat',sein:'ist'},
+{p:'es',sv:'det',haben:'hat',sein:'ist'},
+{p:'wir',sv:'vi',haben:'haben',sein:'sind'},
+{p:'ihr',sv:'ni',haben:'habt',sein:'seid'},
+{p:'sie (de)',subject:'sie',sv:'de',haben:'haben',sein:'sind'},
+{p:'Sie (artigt Ni)',subject:'Sie',sv:'Ni (artigt)',haben:'haben',sein:'sind'}
+];
+const examples={haben:[['ein Buch','en bok'],['Zeit','tid'],['Hunger','hunger'],['eine Frage','en fråga']],sein:[['müde','trött'],['hier','här'],['glücklich','glad'],['zu Hause','hemma']]};
+const forms={haben:['habe','hast','hat','haben','habt'],sein:['bin','bist','ist','sind','seid']};
+const $=id=>document.getElementById(id),shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let mode='both',deck=[],idx=0,score=0,mistakes=[],answered=false;
+function makeDeck(){const verbs=mode==='both'?['haben','sein']:[mode],pool=verbs.flatMap(verb=>people.map(person=>({verb,person})));return shuffle(pool).slice(0,10).map((q,i)=>({...q,example:examples[q.verb][i%4]}));}
+function start(custom){deck=custom||makeDeck();idx=0;score=0;mistakes=[];$('finish').classList.add('hide');$('play').classList.remove('hide');render();}
+function render(){answered=false;const q=deck[idx],correct=q.person[q.verb],pronoun=q.person.subject||q.person.p;
+$('counter').textContent=`${idx+1} av ${deck.length}`;$('scoreLabel').textContent=`Poäng: ${score}`;$('verbLabel').textContent=`Verb: ${q.verb}`;$('bar').style.width=`${100*idx/deck.length}%`;
+$('question').replaceChildren(document.createTextNode(pronoun+' '));const gap=document.createElement('span');gap.className='blank';gap.textContent='_____';$('question').append(gap,document.createTextNode(' '+q.example[0]+'.'));
+const options=shuffle([correct,...shuffle(forms[q.verb].filter(x=>x!==correct)).slice(0,3)]);$('choices').replaceChildren();options.forEach(form=>{let b=document.createElement('button');b.className='choice';b.textContent=form;b.addEventListener('click',()=>choose(form,b));$('choices').appendChild(b)});
+$('feedback').classList.add('hide');$('next').classList.add('hide');}
+function choose(form){if(answered)return;answered=true;const q=deck[idx],correct=q.person[q.verb],ok=form===correct;if(ok)score++;else mistakes.push(q);$('scoreLabel').textContent=`Poäng: ${score}`;
+for(const b of $('choices').children){b.disabled=true;if(b.textContent===correct)b.classList.add('correct');else if(b.textContent===form)b.classList.add('wrong')}
+const f=$('feedback');f.className='feedback'+(ok?' good':'');f.textContent=ok?`Rätt! ${q.person.p} + ${q.verb} → ${correct}.`:`Inte riktigt. Rätt svar är ${correct}. ${q.person.p} (${q.person.sv}) + ${q.verb} → ${correct}.`;$('next').classList.remove('hide');$('next').textContent=idx===deck.length-1?'Visa resultat →':'Nästa fråga →';}
+function advance(){idx++;if(idx<deck.length){render();return} $('bar').style.width='100%';$('play').classList.add('hide');$('finish').classList.remove('hide');$('counter').textContent='Klart!';$('finalScore').textContent=`${score} av ${deck.length} rätt`;$('summary').textContent=score===deck.length?'Fantastiskt! Alla svar rätt.':'Bra kämpat! Repetera gärna de frågor du missade.';$('retry').classList.toggle('hide',mistakes.length===0);try{const old=Number(localStorage.getItem('tyska_best')||0);if(score/deck.length>old)localStorage.setItem('tyska_best',String(score/deck.length));showBest()}catch(e){} }
+function showBest(){try{const v=localStorage.getItem('tyska_best');$('best').textContent=v===null?'Bästa: –':`Bästa: ${Math.round(Number(v)*100)} %`}catch(e){$('best').textContent='Bästa: –'}}
+function section(which){const quiz=which==='quiz';$('quiz').classList.toggle('hide',!quiz);$('reference').classList.toggle('hide',quiz);$('navQuiz').classList.toggle('active',quiz);$('navTable').classList.toggle('active',!quiz)}
+$('next').onclick=advance;$('restart').onclick=()=>start();$('retry').onclick=()=>start(shuffle(mistakes));$('navQuiz').onclick=()=>section('quiz');$('navTable').onclick=()=>section('reference');$('back').onclick=()=>section('quiz');document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;document.querySelectorAll('.mode').forEach(x=>x.classList.toggle('selected',x===b));start()});showBest();start();
+</script></body></html>
